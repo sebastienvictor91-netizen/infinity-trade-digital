@@ -92,8 +92,21 @@ function InfluencePromotionPage() {
   return (
     <Layout>
       <main className="min-h-screen bg-[#050505] text-white overflow-hidden">
-        <section className="relative px-6 py-24 text-center">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#ff7a0035,transparent_45%)]" />
+      <section className="relative overflow-hidden px-6 py-24 text-center">
+
+<div className="absolute inset-0 z-0">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="h-full w-full object-cover"
+  >
+    <source src="/videos/hero-musique.mp4" type="video/mp4" />
+  </video>
+
+  <div className="absolute inset-0 bg-black/15"></div>
+</div>          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#ff7a0035,transparent_45%)]" />
           <div className="relative max-w-6xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-5 py-2 text-sm text-orange-400 mb-8">
               <Sparkles size={16} />
