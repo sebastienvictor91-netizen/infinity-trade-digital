@@ -6,6 +6,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { SITE } from "@/lib/site";
+import { createClient } from "@supabase/supabase-js";
+
+function getSupabase() {
+  return createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    { realtime: { params: { eventsPerSecond: 0 } } }
+  );
+}
+
+const ITD_API_KEY = "ec9efed411da687be0fc0090f247f1cea49bc4d269630dba";
 
 type Props = {
  trigger?: React.ReactNode;
@@ -34,6 +45,18 @@ export function ContactDialog({ trigger, size = "lg", label = "Être recontacté
  `Disponibilité : ${data.get("when")}\n\n` +
  `Site : Infinity Trade & Digital`;
 
+ getSupabase().rpc("create_lead_from_website", {
+   p_api_key: ITD_API_KEY,
+   p_name: String(data.get("name") || ""),
+   p_phone: String(data.get("phone") || ""),
+   p_email: String(data.get("email") || ""),
+   p_project: String(data.get("activity") || ""),
+   p_notes: String(data.get("need") || ""),
+   p_source: "site-infinity-trade-digital",
+ }).then(({ error }) => {
+   if (error) console.error("Erreur insertion CRM:", error);
+ });
+
  data.append("access_key", "89f56c7d-6360-4077-a628-4292103b0864");
  data.append("subject", " Nouveau lead site web - Infinity Trade & Digital");
  data.append("from_name", "Infinity Trade & Digital");
@@ -59,7 +82,7 @@ export function ContactDialog({ trigger, size = "lg", label = "Être recontacté
  const wa = `${SITE.whatsapp}?text=${encodeURIComponent(body)}`;
  window.open(wa, "_blank");
 
- toast.error("L’envoi par mail a échoué. WhatsApp s’ouvre pour envoyer la demande.");
+ toast.error("L'envoi par mail a échoué. WhatsApp s'ouvre pour envoyer la demande.");
  } finally {
  setLoading(false);
  }
